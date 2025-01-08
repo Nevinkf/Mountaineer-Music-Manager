@@ -12,4 +12,18 @@ public class SongFileManager {
 
     private Map<Integer, String> songDatabase = new HashMap<>();
 
+    /*
+     * Adds song to database and adds it to JSON file
+     */
+    public void addSong() {
+
+    }
+
+     /*
+     * Removes song from database and removes it from JSON file
+     */
+    public void removeSong() {
+
+    }
+
 }
