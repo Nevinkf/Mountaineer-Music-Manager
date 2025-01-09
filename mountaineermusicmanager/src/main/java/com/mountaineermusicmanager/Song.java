@@ -5,6 +5,9 @@
  * Description: This file holds all data of a song file
  */
 
+package com.mountaineermusicmanager;
+
+
 public class Song {
 
     private String name;

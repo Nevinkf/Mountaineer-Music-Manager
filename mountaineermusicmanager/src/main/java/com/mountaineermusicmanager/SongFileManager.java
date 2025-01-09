@@ -5,6 +5,7 @@
  * Description: This manages the song files stored on the hard drive between sessions.
  */
 
+package com.mountaineermusicmanager;
 import java.util.HashMap;
 import java.util.Map;
 
