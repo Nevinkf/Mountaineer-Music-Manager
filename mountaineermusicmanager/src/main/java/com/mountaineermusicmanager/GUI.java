@@ -17,6 +17,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import javafx.scene.media.MediaPlayer;; // Make music playing its own class
+
 public class GUI extends JFrame {
 
     final private JPanel mainPanel; // Display content to user
@@ -26,6 +28,9 @@ public class GUI extends JFrame {
     private JScrollPane tableScrollPane; // Holds the songTable and allows user to scroll in the table
     private JTable songTable;
     private LinkedList<String> songsDisplayed = new LinkedList<>(); 
+
+    private MediaPlayer test;
+    
 
     public GUI() {
         this.setLayout(new BorderLayout());
