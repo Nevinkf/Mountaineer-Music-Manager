@@ -45,6 +45,13 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org/jaudiotagger -->
+    <dependency>
+        <groupId>org</groupId>
+        <artifactId>jaudiotagger</artifactId>
+        <version>2.0.3</version>
+    </dependency>
+
 
 </dependencies>
         

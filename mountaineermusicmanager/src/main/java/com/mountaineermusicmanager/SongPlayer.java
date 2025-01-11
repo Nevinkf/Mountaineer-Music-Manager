@@ -14,13 +14,12 @@ import javafx.scene.media.MediaPlayer;
 public class SongPlayer {
 
     private MediaPlayer songPlayer;
-    private String currentSong = "C:\\Users\\nevin\\Nextcloud\\Hobbies\\Software Development\\Java\\Mountaineer-Music-Manager\\songs\\Heaven Pierce Her - ULTRAKILL- INFINITE HYPERDEATH - 01 The Fire Is Gone (for Piano, Saxophone and Trumpet).mp3"; // FileName
 
     /*
      * 
      */
-    public void playSong() {
-        Media songFile = new Media(new File(currentSong).toURI().toString());
+    public void playSong(Song song) {
+        Media songFile = new Media(new File(song.getFileLocation()).toURI().toString());
         songPlayer = new MediaPlayer(songFile);
         songPlayer.play();
     }

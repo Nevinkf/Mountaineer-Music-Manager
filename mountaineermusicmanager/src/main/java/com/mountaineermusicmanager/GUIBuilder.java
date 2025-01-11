@@ -3,7 +3,9 @@ package com.mountaineermusicmanager;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
@@ -12,10 +14,13 @@ import javafx.util.Builder;
 
 public class GUIBuilder implements Builder<Region>{
 
-    private final Runnable playMethod;
+    private SongPlayer songPlayer;
+    private SongFileManager songFileManager;
+    private TableView<Song> songTable;
 
-    GUIBuilder(Runnable playMethod) {
-        this.playMethod = playMethod;
+    GUIBuilder() {
+        songPlayer = new SongPlayer();
+        songFileManager = new SongFileManager();
     }
 
     @Override
@@ -28,7 +33,27 @@ public class GUIBuilder implements Builder<Region>{
     }
 
     private Node createTable() {
-        return new TableView<Song>();
+        songTable = new TableView<>();
+        songTable.setOnMouseClicked((mouseEvent) -> {
+            if (mouseEvent.getClickCount() == 1) { // Single click
+                System.out.println("Row clicked: " + songTable.getItems().get(0).getFileLocation());
+            }   
+        });
+
+        TableColumn<Song, String> column1 =  new TableColumn<>("Name");
+        column1.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<Song, String> column2 = new TableColumn<>("Artist");
+        column2.setCellValueFactory( new PropertyValueFactory<>("artist"));
+
+        songTable.getColumns().add(column1);
+        songTable.getColumns().add(column2);
+
+        for (Integer songID: songFileManager.getAllSongKeys()) {
+            songTable.getItems().add(songFileManager.getSong(songID));
+        }
+
+        return songTable;
     }
 
     private Node createPlaylistTab() {
@@ -37,7 +62,7 @@ public class GUIBuilder implements Builder<Region>{
 
     private Node createMediaTab() {
         Button playButton = new Button("Play");
-        playButton.setOnAction(_ -> playMethod.run());
+        playButton.setOnAction(_ -> songPlayer.playSong(songTable.getSelectionModel().getSelectedItem()));
         return playButton;
     }
 

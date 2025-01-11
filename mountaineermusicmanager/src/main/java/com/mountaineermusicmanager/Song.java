@@ -13,10 +13,33 @@ public class Song {
     private String name;
     private String artist;
     private int songID; // TODO some way to check next aviable id
+    private String fileLocation;
 
-    Song(String name, String artist){
+    Song(String name, String artist, int songID, String fileLocation){
         this.name = name;
         this.artist = artist;
+        this.songID = songID;
+        this.fileLocation = fileLocation;
+    }  
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public String getFileLocation() {
+        return fileLocation;
     }
     
 }
