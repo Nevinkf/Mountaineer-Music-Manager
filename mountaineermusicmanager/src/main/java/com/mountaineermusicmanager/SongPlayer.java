@@ -10,22 +10,41 @@ import java.io.File;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 
 public class SongPlayer {
 
     private MediaPlayer songPlayer;
+    private Song currentSong;
 
     /*
-     * 
+     * current song
      */
-    public void playSong(Song song) {
+    public void changeSong(Song song) {
+        if (checkIsPlaying() == true) {
+            pauseSong();
+        }
         Media songFile = new Media(new File(song.getFileLocation()).toURI().toString());
         songPlayer = new MediaPlayer(songFile);
+        currentSong = song;
+    }
+
+    public void playSong() {
         songPlayer.play();
     }
 
-    public void setSong() {
+    public void pauseSong() {
+        songPlayer.pause();
+    }
 
+    public boolean checkIsPlaying() {
+        if (songPlayer != null) {
+            if (songPlayer.getStatus().equals(Status.PLAYING))
+                return true;
+            else
+                return false;
+        }
+        return false; // NOTE
     }
 
 }

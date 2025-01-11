@@ -23,8 +23,8 @@ import org.jaudiotagger.tag.TagException;
 
 public class SongFileManager {
 
-    private Map<Integer, Song> songDatabase = new HashMap<>();
-    private String songFolder = "";
+    final private Map<Integer, Song> songDatabase = new HashMap<>();
+    private String songFolder = ""; // TODO make song FOLDer able to be changed
 
     SongFileManager() {
         readSongFolder();

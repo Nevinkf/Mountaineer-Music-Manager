@@ -7,8 +7,7 @@ import javafx.util.Builder;
 
 public class ProgramController {
 
-    private Builder<Region> guiBuilder;
-    
+    final private Builder<Region> guiBuilder;
     
     ProgramController() {
         // songFileManager = new SongFileManager(); // 

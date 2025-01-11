@@ -7,6 +7,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
 
@@ -14,8 +15,8 @@ import javafx.util.Builder;
 
 public class GUIBuilder implements Builder<Region>{
 
-    private SongPlayer songPlayer;
-    private SongFileManager songFileManager;
+    final private SongPlayer songPlayer;
+    final private SongFileManager songFileManager;
     private TableView<Song> songTable;
 
     GUIBuilder() {
@@ -37,7 +38,10 @@ public class GUIBuilder implements Builder<Region>{
         songTable.setOnMouseClicked((mouseEvent) -> {
             if (mouseEvent.getClickCount() == 1) { // Single click
                 System.out.println("Row clicked: " + songTable.getItems().get(0).getFileLocation());
-            }   
+            } else if (mouseEvent.getClickCount() == 2) {
+                songPlayer.changeSong(songTable.getSelectionModel().getSelectedItem());
+                songPlayer.playSong();
+            }
         });
 
         TableColumn<Song, String> column1 =  new TableColumn<>("Name");
@@ -61,9 +65,20 @@ public class GUIBuilder implements Builder<Region>{
     }
 
     private Node createMediaTab() {
-        Button playButton = new Button("Play");
-        playButton.setOnAction(_ -> songPlayer.playSong(songTable.getSelectionModel().getSelectedItem()));
-        return playButton;
+        Button playButton = new Button("Play/Resume");
+        playButton.setOnAction(_ -> playAndResume());
+
+        HBox buttonBox = new HBox(playButton);
+
+        return buttonBox;
+    }
+
+    private void playAndResume() {
+        if (songPlayer.checkIsPlaying() == true) {
+            songPlayer.pauseSong();
+        } else {
+            songPlayer.playSong();
+        }
     }
 
 }
