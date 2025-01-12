@@ -21,6 +21,10 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 
+import com.google.common.io.Files;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.DirectoryChooser;
 
 public class SongFileManager {
@@ -56,13 +60,29 @@ public class SongFileManager {
         return songDatabase.keySet();
     }
 
+    // TODO
     public void setSongFolder() {
+        songDatabase.clear();
         DirectoryChooser fileChooser = new DirectoryChooser();
         fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showDialog(null);
-        songFolder = file.getAbsolutePath();
-        // REMOVE 
-        readSongFolder();
+        File folder = fileChooser.showDialog(null);
+
+        if (folder != null) {
+            songFolder = folder.getAbsolutePath();
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Folder Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Folder selected succesfully.");
+            alert.showAndWait();
+            readSongFolder(); // REMOVE
+        } else {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("No Folder Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("No folder was selected.");
+            alert.showAndWait();
+        }
+
     }
 
     private void readSongFolder() {
@@ -70,12 +90,14 @@ public class SongFileManager {
         int songID = 0;
         for (File song : new File(songFolder).listFiles()) {
             try {
-                AudioFile songAudioFile = AudioFileIO.read(song);
-                Tag songTag = songAudioFile.getTag();
+                if ("mp3".equals(Files.getFileExtension(song.getAbsolutePath()))) {
+                    AudioFile songAudioFile = AudioFileIO.read(song);
+                    Tag songTag = songAudioFile.getTag();
 
-                Song newSong = new Song(songTag.getFirst(FieldKey.TITLE), songTag.getFirst(FieldKey.ARTIST), songID, song.getAbsolutePath());
-                songDatabase.put(songID, newSong);
-                songID++;
+                    Song newSong = new Song(songTag.getFirst(FieldKey.TITLE), songTag.getFirst(FieldKey.ARTIST), songID, song.getAbsolutePath());
+                    songDatabase.put(songID, newSong);
+                    songID++;
+                }
             } catch (CannotReadException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

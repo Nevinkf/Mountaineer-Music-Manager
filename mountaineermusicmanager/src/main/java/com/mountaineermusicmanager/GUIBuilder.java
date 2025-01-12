@@ -1,6 +1,8 @@
 package com.mountaineermusicmanager;
 
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -40,9 +42,7 @@ public class GUIBuilder implements Builder<Region>{
     private Node createTable() {
         songTable = new TableView<>();
         songTable.setOnMouseClicked((mouseEvent) -> {
-            if (mouseEvent.getClickCount() == 1) { // Single click
-                System.out.println("Row clicked: " + songTable.getItems().get(0).getFileLocation());
-            } else if (mouseEvent.getClickCount() == 2) {
+            if (mouseEvent.getClickCount() == 2) {
                 songPlayer.changeSong(songTable.getSelectionModel().getSelectedItem());
                 songPlayer.playSong();
             }
@@ -99,11 +99,18 @@ public class GUIBuilder implements Builder<Region>{
     }
 
     private void clearTable() {
-        songTable.getItems().removeAll();
+        songTable.getItems().clear();
     }
 
     private void playAndResume() {
-        if (songPlayer.getCurrentSong() == null) {
+        if (songTable.getItems().isEmpty() == true) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("No Song");
+            alert.setHeaderText(null);
+            alert.setContentText("No song in table.");
+            alert.showAndWait();
+        }
+        else if (songPlayer.getCurrentSong() == null) {
             songPlayer.changeSong(songTable.getItems().get(0));
             songPlayer.playSong();
         }
@@ -117,6 +124,7 @@ public class GUIBuilder implements Builder<Region>{
     private void setSongFolderButton() {
         songFileManager.setSongFolder();
         clearTable();
+        songPlayer.clearMediaPlayer();
         for (Integer songID: songFileManager.getAllSongKeys()) { // REMOVE TESTING
             addToTable(songFileManager.getSong(songID));
         }

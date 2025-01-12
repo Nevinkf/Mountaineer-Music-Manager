@@ -30,11 +30,17 @@ public class SongPlayer {
     }
 
     public void playSong() {
-        songPlayer.play();
+        if (songPlayer != null)
+            songPlayer.play();
     }
 
     public void pauseSong() {
-        songPlayer.pause();
+        if (songPlayer != null)
+            songPlayer.pause();
+    }
+
+    public void clearMediaPlayer() {
+        songPlayer = null;
     }
 
     public Song getCurrentSong() {
