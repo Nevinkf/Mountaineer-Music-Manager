@@ -37,6 +37,10 @@ public class SongPlayer {
         songPlayer.pause();
     }
 
+    public Song getCurrentSong() {
+        return currentSong;
+    }
+
     public boolean checkIsPlaying() {
         if (songPlayer != null) {
             if (songPlayer.getStatus().equals(Status.PLAYING))

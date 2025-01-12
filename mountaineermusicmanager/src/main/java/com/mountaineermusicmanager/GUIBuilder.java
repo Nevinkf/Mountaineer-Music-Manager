@@ -3,12 +3,16 @@ package com.mountaineermusicmanager;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.util.Builder;
 
 //Instead of having a SongPlayer, and using it, 
@@ -29,7 +33,7 @@ public class GUIBuilder implements Builder<Region>{
         BorderPane results = new BorderPane();
         results.setCenter(createTable());
         results.setLeft(createPlaylistTab());
-        results.setTop(createMediaTab());
+        results.setTop(new VBox(createMenuBar(), createMediaTab()));
         return results;
     }
 
@@ -54,7 +58,7 @@ public class GUIBuilder implements Builder<Region>{
         songTable.getColumns().add(column2);
 
         for (Integer songID: songFileManager.getAllSongKeys()) {
-            songTable.getItems().add(songFileManager.getSong(songID));
+            addToTable(songFileManager.getSong(songID));
         }
 
         return songTable;
@@ -68,17 +72,55 @@ public class GUIBuilder implements Builder<Region>{
         Button playButton = new Button("Play/Resume");
         playButton.setOnAction(_ -> playAndResume());
 
-        HBox buttonBox = new HBox(playButton);
+        HBox buttonBox = new HBox(playButton); // Will need later when more buttons are added
 
         return buttonBox;
     }
 
+    private Node createMenuBar() {
+        MenuBar menuBar = new MenuBar();
+
+        Menu fileMenu = new Menu("File");
+
+        MenuItem songFolderMenuItem = new MenuItem("Set Song Folder");
+        songFolderMenuItem.setOnAction(_ -> setSongFolderButton());
+
+        fileMenu.getItems().add(songFolderMenuItem);
+
+        menuBar.getMenus().add(fileMenu);
+
+        return menuBar;
+    }
+
+    // Stuff below move to different class eventually
+
+    private void addToTable(Song song) {
+        songTable.getItems().add(song);
+    }
+
+    private void clearTable() {
+        songTable.getItems().removeAll();
+    }
+
     private void playAndResume() {
-        if (songPlayer.checkIsPlaying() == true) {
+        if (songPlayer.getCurrentSong() == null) {
+            songPlayer.changeSong(songTable.getItems().get(0));
+            songPlayer.playSong();
+        }
+        else if (songPlayer.checkIsPlaying() == true) {
             songPlayer.pauseSong();
         } else {
             songPlayer.playSong();
         }
+    }
+
+    private void setSongFolderButton() {
+        songFileManager.setSongFolder();
+        clearTable();
+        for (Integer songID: songFileManager.getAllSongKeys()) { // REMOVE TESTING
+            addToTable(songFileManager.getSong(songID));
+        }
+        
     }
 
 }

@@ -21,13 +21,17 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 
+import javafx.stage.DirectoryChooser;
+
 public class SongFileManager {
 
     final private Map<Integer, Song> songDatabase = new HashMap<>();
-    private String songFolder = ""; // TODO make song FOLDer able to be changed
+    private String songFolder = ""; 
 
     SongFileManager() {
-        readSongFolder();
+        if (!"".equals(songFolder)) {
+            readSongFolder();
+        }
     }
 
     /*
@@ -50,6 +54,15 @@ public class SongFileManager {
 
     public Set<Integer> getAllSongKeys() {
         return songDatabase.keySet();
+    }
+
+    public void setSongFolder() {
+        DirectoryChooser fileChooser = new DirectoryChooser();
+        fileChooser.setTitle("Open Resource File");
+        File file = fileChooser.showDialog(null);
+        songFolder = file.getAbsolutePath();
+        // REMOVE 
+        readSongFolder();
     }
 
     private void readSongFolder() {
