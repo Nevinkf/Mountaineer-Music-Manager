@@ -23,6 +23,7 @@ import org.jaudiotagger.tag.TagException;
 
 import com.google.common.io.Files;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.DirectoryChooser;
@@ -31,6 +32,7 @@ public class SongFileManager {
 
     final private Map<Integer, Song> songDatabase = new HashMap<>();
     private String songFolder = ""; 
+    private IntegerProperty currentTime;
 
     SongFileManager() {
         if (!"".equals(songFolder)) {

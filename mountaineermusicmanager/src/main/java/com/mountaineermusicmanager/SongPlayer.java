@@ -17,7 +17,6 @@ public class SongPlayer {
 
     private MediaPlayer songPlayer;
     private Song currentSong;
-    private Duration placeInSong;
 
     /*
      * current song
@@ -46,6 +45,10 @@ public class SongPlayer {
         currentSong = null;
     }
 
+    public MediaPlayer getSongPlayer() {
+        return songPlayer;
+    }
+
     public Song getCurrentSong() {
         return currentSong;
     }
@@ -58,4 +61,8 @@ public class SongPlayer {
         return false; // NOTE
     }
 
+   public void seek(Duration duration) {
+        if (songPlayer != null)
+            songPlayer.seek(duration);
+   }
 }
