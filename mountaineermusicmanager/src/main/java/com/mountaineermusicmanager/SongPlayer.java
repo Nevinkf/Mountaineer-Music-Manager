@@ -11,11 +11,13 @@ import java.io.File;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
+import javafx.util.Duration;
 
 public class SongPlayer {
 
     private MediaPlayer songPlayer;
     private Song currentSong;
+    private Duration placeInSong;
 
     /*
      * current song
@@ -41,6 +43,7 @@ public class SongPlayer {
 
     public void clearMediaPlayer() {
         songPlayer = null;
+        currentSong = null;
     }
 
     public Song getCurrentSong() {
@@ -48,12 +51,10 @@ public class SongPlayer {
     }
 
     public boolean checkIsPlaying() {
-        if (songPlayer != null) {
-            if (songPlayer.getStatus().equals(Status.PLAYING))
-                return true;
-            else
-                return false;
-        }
+        if (songPlayer != null) 
+            if (songPlayer.getStatus().equals(Status.PLAYING)) 
+                return true;        
+
         return false; // NOTE
     }
 

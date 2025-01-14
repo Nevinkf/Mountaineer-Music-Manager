@@ -72,7 +72,13 @@ public class GUIBuilder implements Builder<Region>{
         Button playButton = new Button("Play/Resume");
         playButton.setOnAction(_ -> playAndResume());
 
-        HBox buttonBox = new HBox(playButton); // Will need later when more buttons are added
+        Button lastSongButton = new Button("<");
+        lastSongButton.setOnAction(_ -> lastSong());
+
+        Button nextSongButton = new Button(">");
+        nextSongButton.setOnAction(_ -> nextSong());
+
+        HBox buttonBox = new HBox(lastSongButton, playButton, nextSongButton); // Will need later when more buttons are added
 
         return buttonBox;
     }
@@ -94,6 +100,7 @@ public class GUIBuilder implements Builder<Region>{
 
     // Stuff below move to different class eventually
 
+    //TODO fix error when clicking buttons with no songs in table
     private void addToTable(Song song) {
         songTable.getItems().add(song);
     }
@@ -102,8 +109,45 @@ public class GUIBuilder implements Builder<Region>{
         songTable.getItems().clear();
     }
 
+    private void lastSong() {
+        int index = songTable.getItems().indexOf(songPlayer.getCurrentSong()) - 1;
+
+        boolean songPlaying = false;
+        if (songPlayer.checkIsPlaying()) 
+            songPlaying = true;
+        
+        if (index < 0)
+            songPlayer.changeSong(songTable.getItems().getLast());
+        else 
+            songPlayer.changeSong(songTable.getItems().get(index));
+
+        if (songPlaying) 
+            songPlayer.playSong();
+        
+    }
+
+    private void nextSong() {
+        int index = songTable.getItems().indexOf(songPlayer.getCurrentSong()) + 1;
+        
+        boolean songPlaying = false;
+        if (songPlayer.checkIsPlaying()) 
+            songPlaying = true;
+
+        if (index > songTable.getItems().indexOf(songTable.getItems().getLast()))
+            songPlayer.changeSong(songTable.getItems().getFirst());
+        else 
+            songPlayer.changeSong(songTable.getItems().get(index));
+
+        if (songPlayer.checkIsPlaying()) 
+            songPlayer.playSong();
+        
+
+        if (songPlaying) 
+            songPlayer.playSong();
+    }
+
     private void playAndResume() {
-        if (songTable.getItems().isEmpty() == true) {
+        if (songTable.getItems().isEmpty() == true) { // TODO THIS should be a method
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("No Song");
             alert.setHeaderText(null);
@@ -114,13 +158,14 @@ public class GUIBuilder implements Builder<Region>{
             songPlayer.changeSong(songTable.getItems().get(0));
             songPlayer.playSong();
         }
-        else if (songPlayer.checkIsPlaying() == true) {
+        else if (songPlayer.checkIsPlaying()) {
             songPlayer.pauseSong();
         } else {
             songPlayer.playSong();
         }
-    }
 
+    }
+    //C:\Users\nevin\Nextcloud\Archive\music\ULTRAKILL Soundtrack\INFINITE HYPERDEATH
     private void setSongFolderButton() {
         songFileManager.setSongFolder();
         clearTable();
